@@ -52,6 +52,9 @@ func ReadTabular(s string) [][]string {
 			if (i + 1) < len(cols) {
 				end = cols[i+1]
 			}
+			if end > len(l) {
+				end = len(l)
+			}
 			s := l[start:end]
 			s = strings.TrimSpace(s)
 			row = append(row, s)
