@@ -1,6 +1,7 @@
 package tabular
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -65,4 +66,34 @@ func ReadTabular(s string) [][]string {
 	}
 
 	return rows
+}
+
+func FormatTSV(s string) string {
+	lines := strings.Split(s, "\n")
+	widths := []int{}
+	for _, l := range lines {
+		splits := strings.Split(l, "\t")
+		for i, col := range splits {
+			n := len(col)
+			if len(widths) <= i {
+				widths = append(widths, 0)
+			}
+			if widths[i] < n {
+				widths[i] = n
+			}
+		}
+	}
+
+	out := []string{}
+	for _, l := range lines {
+		splits := strings.Split(l, "\t")
+		for i, col := range splits {
+			if i != 0 {
+				out = append(out, " ")
+			}
+			out = append(out, fmt.Sprintf("% *s", widths[i], col))
+		}
+		out = append(out, "\n")
+	}
+	return strings.Join(out, "")
 }
